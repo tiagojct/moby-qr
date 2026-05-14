@@ -37,14 +37,17 @@ async function copyToClipboard() {
 
   const btn = document.getElementById('copy-png');
 
-  canvas.toBlob(async (blob) => {
-    try {
-      await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
-      flashBtn(btn, 'Copied!', true);
-    } catch {
-      flashBtn(btn, 'Unavailable', false);
-    }
-  });
+  const blob = await new Promise((res) => canvas.toBlob(res, 'image/png'));
+  if (!blob) return;
+
+  try {
+    await navigator.clipboard.write([new ClipboardItem({ 'image/png': blob })]);
+    flashBtn(btn, 'Copied!', true);
+  } catch {
+    // Clipboard API unavailable or denied — save as download instead
+    triggerBlobDownload(blob, 'pequod-qr.png');
+    flashBtn(btn, 'Saved PNG ↓', true);
+  }
 }
 
 function flashBtn(btn, msg, ok) {
