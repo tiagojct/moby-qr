@@ -3,6 +3,7 @@ import '@phosphor-icons/web/regular';
 import { initQR, updateQR, flashWhiteDots } from './qr.js';
 import { initForm, buildData } from './form.js';
 import { initExport } from './export.js';
+import { PALETTES } from './palettes.js';
 
 // ─── Config state ────────────────────────────────────────────────────
 const config = {
@@ -25,6 +26,22 @@ const config = {
   },
   image: '',
 };
+
+// ─── Active palette tracking ──────────────────────────────────────────
+let activePaletteId = 'pequod';
+
+function setActivePalette(id) {
+  activePaletteId = id;
+  document.querySelectorAll('.palette-card').forEach((el) => {
+    el.classList.toggle('active', el.dataset.palette === id);
+  });
+}
+
+function clearActivePalette() {
+  if (!activePaletteId) return;
+  activePaletteId = null;
+  document.querySelectorAll('.palette-card').forEach((el) => el.classList.remove('active'));
+}
 
 // ─── Easter egg state ─────────────────────────────────────────────────
 let lastDataHadMobyDick = false;
@@ -64,6 +81,12 @@ function refresh() {
   updateQR(buildQRConfig(), data);
 }
 
+// ─── Input helpers ────────────────────────────────────────────────────
+function setInputValue(id, value) {
+  const el = document.getElementById(id);
+  if (el) el.value = value;
+}
+
 // ─── Slider helpers ──────────────────────────────────────────────────
 function bindSlider(id, valId, format, onUpdate) {
   const slider = document.getElementById(id);
@@ -93,6 +116,53 @@ function init() {
 
 // ─── Customisation panel wiring ───────────────────────────────────────
 function setupCustomisation() {
+
+  // ── Palette grid ──
+  const grid = document.getElementById('palette-grid');
+  if (grid) {
+    grid.innerHTML = PALETTES.map((p) => `
+      <button class="palette-card${p.id === activePaletteId ? ' active' : ''}"
+              data-palette="${p.id}"
+              title="${p.name} — ${p.desc}"
+              type="button">
+        <div class="palette-swatch" style="background:${p.bg}">
+          <div class="palette-dot" style="background:${p.corner}"></div>
+          <div class="palette-dot" style="background:${p.dots}"></div>
+          <div class="palette-dot" style="background:${p.corner}"></div>
+        </div>
+        <span class="palette-name">${p.name}</span>
+      </button>
+    `).join('');
+
+    grid.addEventListener('click', (e) => {
+      const card = e.target.closest('.palette-card');
+      if (!card) return;
+      const palette = PALETTES.find((p) => p.id === card.dataset.palette);
+      if (!palette) return;
+
+      config.dotsOptions        = { type: config.dotsOptions.type, color: palette.dots };
+      config.cornersSquareOptions = { type: config.cornersSquareOptions.type, color: palette.corner };
+      config.cornersDotOptions  = { type: config.cornersDotOptions.type, color: palette.corner };
+      config.backgroundOptions  = { color: palette.bg };
+
+      // Sync color pickers to new palette values
+      setInputValue('dot-color', palette.dots);
+      setInputValue('corner-square-color', palette.corner);
+      setInputValue('corner-dot-color', palette.corner);
+      setInputValue('bg-color', palette.bg);
+
+      // Ensure solid mode is active (palettes don't use gradient)
+      const solidRadio = document.querySelector('input[name="dot-color-mode"][value="solid"]');
+      if (solidRadio && !solidRadio.checked) {
+        solidRadio.checked = true;
+        document.getElementById('dot-solid-ui').hidden = false;
+        document.getElementById('dot-gradient-ui').hidden = true;
+      }
+
+      setActivePalette(palette.id);
+      refresh();
+    });
+  }
 
   // Hull pattern (dot type)
   document.getElementById('dot-type')?.addEventListener('change', (e) => {
@@ -134,14 +204,15 @@ function setupCustomisation() {
       const isGradient = r.value === 'gradient' && r.checked;
       solidUI.hidden    = isGradient;
       gradientUI.hidden = !isGradient;
+      if (isGradient) clearActivePalette();
       applyDotColor();
     });
   });
 
-  document.getElementById('dot-color')?.addEventListener('input', applyDotColor);
-  document.getElementById('gradient-type')?.addEventListener('change', applyDotColor);
-  document.getElementById('gradient-color-1')?.addEventListener('input', applyDotColor);
-  document.getElementById('gradient-color-2')?.addEventListener('input', applyDotColor);
+  document.getElementById('dot-color')?.addEventListener('input', () => { clearActivePalette(); applyDotColor(); });
+  document.getElementById('gradient-type')?.addEventListener('change', () => { clearActivePalette(); applyDotColor(); });
+  document.getElementById('gradient-color-1')?.addEventListener('input', () => { clearActivePalette(); applyDotColor(); });
+  document.getElementById('gradient-color-2')?.addEventListener('input', () => { clearActivePalette(); applyDotColor(); });
 
   // Corner square type & color
   document.getElementById('corner-square-type')?.addEventListener('change', (e) => {
@@ -149,6 +220,7 @@ function setupCustomisation() {
     refresh();
   });
   document.getElementById('corner-square-color')?.addEventListener('input', (e) => {
+    clearActivePalette();
     config.cornersSquareOptions.color = e.target.value;
     refresh();
   });
@@ -159,12 +231,14 @@ function setupCustomisation() {
     refresh();
   });
   document.getElementById('corner-dot-color')?.addEventListener('input', (e) => {
+    clearActivePalette();
     config.cornersDotOptions.color = e.target.value;
     refresh();
   });
 
   // Background color
   document.getElementById('bg-color')?.addEventListener('input', (e) => {
+    clearActivePalette();
     config.backgroundOptions.color = e.target.value;
     refresh();
   });
