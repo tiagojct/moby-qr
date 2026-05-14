@@ -1,6 +1,8 @@
+import { icon, hydrateIcons } from './icons.js';
+
 const QR_TYPES = {
   url: {
-    icon: 'ph-globe',
+    icon: 'globe',
     label: 'A Distant Shore — URL',
     fields: () => `
       <div class="field-row">
@@ -8,14 +10,11 @@ const QR_TYPES = {
         <input id="f-url" type="url" class="input-text" placeholder="https://example.com" autocomplete="off" />
       </div>
     `,
-    buildData: () => {
-      const v = val('f-url');
-      return v;
-    },
+    buildData: () => val('f-url'),
   },
 
   text: {
-    icon: 'ph-text-t',
+    icon: 'text-t',
     label: 'Words in the Water — Plain text',
     fields: () => `
       <div class="field-row">
@@ -27,7 +26,7 @@ const QR_TYPES = {
   },
 
   vcard: {
-    icon: 'ph-address-book',
+    icon: 'address-book',
     label: "A Sailor's Manifest — vCard",
     fields: () => `
       <div class="field-row">
@@ -61,8 +60,7 @@ const QR_TYPES = {
       if (!first && !last) return '';
       const fn = [first, last].filter(Boolean).join(' ');
       const lines = [
-        'BEGIN:VCARD',
-        'VERSION:3.0',
+        'BEGIN:VCARD', 'VERSION:3.0',
         `N:${escVCard(last)};${escVCard(first)};;;`,
         `FN:${escVCard(fn)}`,
       ];
@@ -80,7 +78,7 @@ const QR_TYPES = {
   },
 
   wifi: {
-    icon: 'ph-wifi-high',
+    icon: 'wifi-high',
     label: 'The Wireless Sea — Wi-Fi',
     fields: () => `
       <div class="field-row">
@@ -112,7 +110,7 @@ const QR_TYPES = {
       const pass   = val('f-wifi-pass');
       const enc    = val('f-wifi-enc') || 'WPA';
       const hidden = document.getElementById('f-wifi-hidden')?.checked ? 'true' : 'false';
-      const esc = (s) => s.replace(/([\\;,":"])/g, '\\$1');
+      const esc    = (s) => s.replace(/([\\;,":"])/g, '\\$1');
       let str = `WIFI:T:${enc};S:${esc(ssid)};`;
       if (enc !== 'nopass' && pass) str += `P:${esc(pass)};`;
       str += `H:${hidden};;`;
@@ -121,7 +119,7 @@ const QR_TYPES = {
   },
 
   email: {
-    icon: 'ph-envelope',
+    icon: 'envelope',
     label: 'Letter from the Deep — Email',
     fields: () => `
       <div class="field-row">
@@ -152,7 +150,7 @@ const QR_TYPES = {
   },
 
   sms: {
-    icon: 'ph-chat-circle-text',
+    icon: 'chat-circle-text',
     label: 'Signal Flare — SMS',
     fields: () => `
       <div class="field-row">
@@ -173,7 +171,7 @@ const QR_TYPES = {
   },
 
   geo: {
-    icon: 'ph-map-pin',
+    icon: 'map-pin',
     label: 'Mark the Chart — Coordinates',
     fields: () => `
       <div class="field-row">
@@ -229,14 +227,14 @@ function renderFields(type) {
 
   container.innerHTML = `
     <div class="form-type-header">
-      <${def.icon} size="16"></${def.icon}>
+      ${icon(def.icon, 16)}
       ${def.label}
     </div>
     ${def.fields()}
   `;
 
   container.querySelectorAll('input, textarea, select').forEach((el) => {
-    el.addEventListener('input', () => onChangeCallback?.(buildData()));
+    el.addEventListener('input',  () => onChangeCallback?.(buildData()));
     el.addEventListener('change', () => onChangeCallback?.(buildData()));
   });
 }

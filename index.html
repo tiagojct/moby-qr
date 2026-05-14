@@ -20,7 +20,7 @@
 
   <main class="app-layout">
 
-    <!-- LEFT COLUMN: controls -->
+    <!-- LEFT COLUMN -->
     <div class="col-controls">
 
       <!-- Type selector -->
@@ -43,15 +43,18 @@
       </section>
 
       <!-- Dynamic fields -->
-      <section class="panel section-fields" id="section-fields">
+      <section class="panel section-fields">
         <div id="qr-fields"></div>
       </section>
 
-      <!-- Customisation: Rig the Ship -->
+      <!-- Customisation -->
       <section class="panel section-rig">
         <h2 class="section-title">
           <ph-anchor size="20"></ph-anchor>
           Rig the Ship
+          <button id="reset-all" class="btn-reset" type="button" title="Reset to defaults">
+            <ph-arrow-counter-clockwise size="15"></ph-arrow-counter-clockwise>
+          </button>
         </h2>
 
         <!-- Palette presets -->
@@ -60,8 +63,22 @@
             <ph-swatches size="16"></ph-swatches>
             The Pequod Palette
           </h3>
-          <div class="palette-grid" id="palette-grid">
-            <!-- Rendered by main.js -->
+          <div class="palette-grid" id="palette-grid"></div>
+        </div>
+
+        <!-- Saved presets -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-floppy-disk size="16"></ph-floppy-disk>
+            Saved presets
+          </h3>
+          <div id="saved-presets-list"></div>
+          <div class="save-row">
+            <input type="text" id="preset-name" class="input-text" placeholder="Name this preset…" />
+            <button id="preset-save" class="btn-ghost" type="button">
+              <ph-floppy-disk size="14"></ph-floppy-disk>
+              Save
+            </button>
           </div>
         </div>
 
@@ -132,9 +149,37 @@
             <option value="extra-rounded">Extra Rounded</option>
             <option value="dot">Dot</option>
           </select>
-          <div class="color-row" style="margin-top: 8px;">
-            <label class="color-label" for="corner-square-color">Color</label>
-            <input type="color" id="corner-square-color" class="input-color" value="#c8a96e" />
+          <div class="radio-row" style="margin-top:10px;">
+            <label class="radio-label">
+              <input type="radio" name="corner-sq-mode" value="solid" checked />
+              <span>Solid</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="corner-sq-mode" value="gradient" />
+              <span>Gradient</span>
+            </label>
+          </div>
+          <div id="corner-sq-solid-ui">
+            <div class="color-row" style="margin-top:6px;">
+              <label class="color-label" for="corner-square-color">Color</label>
+              <input type="color" id="corner-square-color" class="input-color" value="#c8a96e" />
+            </div>
+          </div>
+          <div id="corner-sq-gradient-ui" hidden>
+            <div class="field-row" style="margin-top:6px;">
+              <select id="corner-sq-gradient-type" class="input-select">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+              </select>
+            </div>
+            <div class="color-row">
+              <label class="color-label" for="corner-sq-gradient-c1">Stop 1</label>
+              <input type="color" id="corner-sq-gradient-c1" class="input-color" value="#c8a96e" />
+            </div>
+            <div class="color-row">
+              <label class="color-label" for="corner-sq-gradient-c2">Stop 2</label>
+              <input type="color" id="corner-sq-gradient-c2" class="input-color" value="#7a8a99" />
+            </div>
           </div>
         </div>
 
@@ -148,7 +193,7 @@
             <option value="square">Square</option>
             <option value="dot">Dot</option>
           </select>
-          <div class="color-row" style="margin-top: 8px;">
+          <div class="color-row" style="margin-top:8px;">
             <label class="color-label" for="corner-dot-color">Color</label>
             <input type="color" id="corner-dot-color" class="input-color" value="#c8a96e" />
           </div>
@@ -190,14 +235,12 @@
             <span class="toggle-text">Hide background dots behind logo</span>
           </label>
           <div class="slider-row">
-            <label class="slider-label" for="image-size">Image size</label>
+            <label class="slider-label">Image size <span class="slider-val" id="image-size-val">0.40</span></label>
             <input type="range" id="image-size" min="0.1" max="0.5" step="0.01" value="0.4" class="input-range" />
-            <span class="slider-val" id="image-size-val">0.40</span>
           </div>
           <div class="slider-row">
-            <label class="slider-label" for="image-margin">Image margin</label>
+            <label class="slider-label">Image margin <span class="slider-val" id="image-margin-val">4px</span></label>
             <input type="range" id="image-margin" min="0" max="20" step="1" value="4" class="input-range" />
-            <span class="slider-val" id="image-margin-val">4px</span>
           </div>
         </div>
 
@@ -205,21 +248,17 @@
         <div class="rig-group">
           <h3 class="rig-label">
             <ph-frame-corners size="16"></ph-frame-corners>
-            Size
+            Size &amp; options
           </h3>
           <div class="slider-row">
-            <label class="slider-label" for="qr-size">Width / Height</label>
+            <label class="slider-label">Width / Height <span class="slider-val" id="qr-size-val">300px</span></label>
             <input type="range" id="qr-size" min="100" max="1000" step="10" value="300" class="input-range" />
-            <span class="slider-val" id="qr-size-val">300px</span>
           </div>
-          <div class="slider-row" style="margin-top: 12px;">
-            <label class="slider-label" for="qr-margin">
-              Open water
-            </label>
+          <div class="slider-row" style="margin-top:12px;">
+            <label class="slider-label">Open water <span class="slider-val" id="qr-margin-val">10</span></label>
             <input type="range" id="qr-margin" min="0" max="50" step="1" value="10" class="input-range" />
-            <span class="slider-val" id="qr-margin-val">10</span>
           </div>
-          <div class="field-row" style="margin-top: 12px;">
+          <div class="field-row" style="margin-top:12px;">
             <label class="field-label" id="ec-label" for="error-correction">Hull integrity</label>
             <select id="error-correction" class="input-select">
               <option value="L">L — Low (7%)</option>
@@ -230,10 +269,31 @@
           </div>
         </div>
 
+        <!-- Label / frame -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-tag size="16"></ph-tag>
+            Label
+          </h3>
+          <div class="field-row">
+            <label class="field-label" for="label-text">Text</label>
+            <input id="label-text" type="text" class="input-text" placeholder="Scan me…" autocomplete="off" />
+          </div>
+          <div class="color-row" style="margin-top:8px;">
+            <label class="color-label" for="label-color">Color</label>
+            <input type="color" id="label-color" class="input-color" value="#d4c5a9" />
+          </div>
+          <div class="slider-row" style="margin-top:10px;">
+            <label class="slider-label">Font size <span class="slider-val" id="label-size-val">16px</span></label>
+            <input type="range" id="label-size" min="10" max="48" step="1" value="16" class="input-range" />
+          </div>
+          <p class="hint-text">Label is added below the QR on PNG export.</p>
+        </div>
+
       </section>
     </div>
 
-    <!-- RIGHT COLUMN: preview + export -->
+    <!-- RIGHT COLUMN -->
     <div class="col-preview">
 
       <section class="panel section-preview">
@@ -243,11 +303,24 @@
         </h2>
         <div id="qr-preview-wrapper">
           <div id="qr-canvas-container"></div>
+          <div id="label-preview" hidden>
+            <span id="label-preview-text"></span>
+          </div>
           <div id="qr-empty-state">
             <ph-anchor size="32"></ph-anchor>
             <p>"I know not all that may be coming, but be it what it will, I'll go to it laughing."</p>
             <span class="empty-attr">— Melville</span>
           </div>
+        </div>
+        <div id="scan-status" hidden>
+          <span id="scan-ok" class="scan-badge scan-ok" hidden>
+            <ph-check-circle size="14"></ph-check-circle>
+            Scannable
+          </span>
+          <span id="scan-fail" class="scan-badge scan-fail" hidden>
+            <ph-warning-circle size="14"></ph-warning-circle>
+            Not scannable — reduce logo or raise error correction
+          </span>
         </div>
       </section>
 
@@ -257,6 +330,10 @@
           Launch
         </h2>
         <div class="export-buttons">
+          <button id="copy-png" class="btn-export" type="button">
+            <ph-copy size="18"></ph-copy>
+            Copy to Clipboard (PNG)
+          </button>
           <button id="download-png" class="btn-export" type="button">
             <ph-download-simple size="18"></ph-download-simple>
             Lower the Boats (PNG)

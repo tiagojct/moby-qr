@@ -137,12 +137,17 @@ body {
   border-bottom: 1px solid var(--border);
 }
 
-.section-title ph-crosshair,
-.section-title ph-anchor,
-.section-title ph-eye,
-.section-title ph-boat {
+.section-title .ph-icon {
   color: var(--accent);
   flex-shrink: 0;
+}
+
+.ph-icon {
+  display: inline-flex;
+  align-items: center;
+  vertical-align: middle;
+  flex-shrink: 0;
+  line-height: 0;
 }
 
 /* ─── Rig groups ─────────────────────────────────────────────────── */
@@ -546,7 +551,7 @@ textarea {
   color: var(--muted);
 }
 
-#qr-empty-state ph-anchor {
+#qr-empty-state .ph-icon {
   color: var(--border);
   opacity: 0.7;
 }
@@ -595,7 +600,7 @@ textarea {
   color: var(--accent);
 }
 
-.btn-export:hover ph-download-simple {
+.btn-export:hover .ph-icon {
   color: var(--accent);
 }
 
@@ -686,6 +691,132 @@ textarea {
   align-items: center;
   gap: 8px;
   margin-top: 6px;
+}
+
+/* ─── Reset button (in section title) ───────────────────────────────── */
+.section-title {
+  justify-content: flex-start;
+}
+
+.btn-reset {
+  margin-left: auto;
+  background: none;
+  border: 1px solid var(--border);
+  color: var(--muted);
+  padding: 3px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: border-color 0.15s, color 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-reset:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Save preset row ────────────────────────────────────────────────── */
+.save-row {
+  display: flex;
+  gap: 6px;
+  margin-top: 8px;
+  align-items: stretch;
+}
+
+.save-row .input-text {
+  flex: 1;
+  min-width: 0;
+}
+
+.save-row .btn-ghost {
+  flex-shrink: 0;
+  white-space: nowrap;
+  margin-top: 0;
+}
+
+/* ─── Saved preset rows ──────────────────────────────────────────────── */
+.preset-row {
+  display: flex;
+  align-items: center;
+  gap: 4px;
+  margin-bottom: 4px;
+}
+
+.preset-row .preset-apply {
+  flex: 1;
+  text-align: left;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+  margin-top: 0;
+}
+
+.btn-ghost-danger {
+  background: none;
+  border: 1px solid transparent;
+  color: var(--muted);
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  padding: 4px 6px;
+  cursor: pointer;
+  display: inline-flex;
+  align-items: center;
+  transition: color 0.15s;
+  flex-shrink: 0;
+}
+
+.btn-ghost-danger:hover {
+  color: #d4896a;
+  border-color: var(--danger);
+}
+
+/* ─── Hint text ──────────────────────────────────────────────────────── */
+.hint-text {
+  font-size: 0.68rem;
+  color: var(--muted);
+  opacity: 0.7;
+  margin-top: 8px;
+  line-height: 1.5;
+}
+
+/* ─── Scan status ────────────────────────────────────────────────────── */
+#scan-status {
+  padding: 6px 0 0 0;
+  display: flex;
+}
+
+.scan-badge {
+  display: inline-flex;
+  align-items: center;
+  gap: 5px;
+  font-family: var(--font-ui);
+  font-size: 0.72rem;
+  padding: 4px 8px;
+  border: 1px solid;
+  letter-spacing: 0.04em;
+}
+
+.scan-ok {
+  color: #4caf75;
+  border-color: #2a5c3f;
+  background: #0a1f12;
+}
+
+.scan-fail {
+  color: #d4896a;
+  border-color: var(--danger);
+  background: #1a0a08;
+}
+
+/* ─── Label preview ──────────────────────────────────────────────────── */
+#label-preview {
+  width: 100%;
+  padding: 10px 0 2px;
+  text-align: center;
+  font-family: 'IBM Plex Mono', monospace;
+  border-top: 1px dashed var(--border);
+  margin-top: 4px;
 }
 
 /* ─── Footer ─────────────────────────────────────────────────────── */
