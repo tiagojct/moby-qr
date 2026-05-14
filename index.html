@@ -1,0 +1,269 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Pequod — Call me Ishmael</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,700;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="/src/style.css" />
+</head>
+<body>
+
+  <header class="site-header">
+    <div class="header-inner">
+      <h1 class="site-title">Pequod</h1>
+      <p class="site-subtitle">Call me Ishmael.</p>
+    </div>
+  </header>
+
+  <main class="app-layout">
+
+    <!-- LEFT COLUMN: controls -->
+    <div class="col-controls">
+
+      <!-- Type selector -->
+      <section class="panel section-hunt">
+        <h2 class="section-title">
+          <ph-crosshair size="20"></ph-crosshair>
+          What are you hunting?
+        </h2>
+        <div class="field-row">
+          <select id="qr-type" class="input-select">
+            <option value="url">A Distant Shore (URL)</option>
+            <option value="text">Words in the Water (Plain text)</option>
+            <option value="vcard">A Sailor's Manifest (vCard)</option>
+            <option value="wifi">The Wireless Sea (Wi-Fi)</option>
+            <option value="email">Letter from the Deep (Email)</option>
+            <option value="sms">Signal Flare (SMS)</option>
+            <option value="geo">Mark the Chart (Coordinates)</option>
+          </select>
+        </div>
+      </section>
+
+      <!-- Dynamic fields -->
+      <section class="panel section-fields" id="section-fields">
+        <div id="qr-fields"></div>
+      </section>
+
+      <!-- Customisation: Rig the Ship -->
+      <section class="panel section-rig">
+        <h2 class="section-title">
+          <ph-anchor size="20"></ph-anchor>
+          Rig the Ship
+        </h2>
+
+        <!-- Hull pattern -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-squares-four size="16"></ph-squares-four>
+            Hull pattern
+          </h3>
+          <select id="dot-type" class="input-select">
+            <option value="square">Square</option>
+            <option value="rounded">Rounded</option>
+            <option value="dots">Dots</option>
+            <option value="classy">Classy</option>
+            <option value="classy-rounded">Classy Rounded</option>
+            <option value="extra-rounded">Extra Rounded</option>
+          </select>
+        </div>
+
+        <!-- Dot color: The Whale's Skin -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-palette size="16"></ph-palette>
+            The Whale's Skin
+          </h3>
+          <div class="radio-row">
+            <label class="radio-label">
+              <input type="radio" name="dot-color-mode" value="solid" checked />
+              <span>Solid</span>
+            </label>
+            <label class="radio-label">
+              <input type="radio" name="dot-color-mode" value="gradient" />
+              <span>Gradient</span>
+            </label>
+          </div>
+          <div id="dot-solid-ui">
+            <div class="color-row">
+              <label class="color-label" for="dot-color">Dot color</label>
+              <input type="color" id="dot-color" class="input-color" value="#c8a96e" />
+            </div>
+          </div>
+          <div id="dot-gradient-ui" hidden>
+            <div class="field-row">
+              <select id="gradient-type" class="input-select">
+                <option value="linear">Linear</option>
+                <option value="radial">Radial</option>
+              </select>
+            </div>
+            <div class="color-row">
+              <label class="color-label" for="gradient-color-1">Stop 1</label>
+              <input type="color" id="gradient-color-1" class="input-color" value="#c8a96e" />
+            </div>
+            <div class="color-row">
+              <label class="color-label" for="gradient-color-2">Stop 2</label>
+              <input type="color" id="gradient-color-2" class="input-color" value="#7a8a99" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Corner squares -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-corners-out size="16"></ph-corners-out>
+            Corner squares
+          </h3>
+          <select id="corner-square-type" class="input-select">
+            <option value="square">Square</option>
+            <option value="extra-rounded">Extra Rounded</option>
+            <option value="dot">Dot</option>
+          </select>
+          <div class="color-row" style="margin-top: 8px;">
+            <label class="color-label" for="corner-square-color">Color</label>
+            <input type="color" id="corner-square-color" class="input-color" value="#c8a96e" />
+          </div>
+        </div>
+
+        <!-- Corner dots -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-dots-three-circle size="16"></ph-dots-three-circle>
+            Corner dots
+          </h3>
+          <select id="corner-dot-type" class="input-select">
+            <option value="square">Square</option>
+            <option value="dot">Dot</option>
+          </select>
+          <div class="color-row" style="margin-top: 8px;">
+            <label class="color-label" for="corner-dot-color">Color</label>
+            <input type="color" id="corner-dot-color" class="input-color" value="#c8a96e" />
+          </div>
+        </div>
+
+        <!-- Background -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-paint-bucket size="16"></ph-paint-bucket>
+            Background
+          </h3>
+          <div class="color-row">
+            <label class="color-label" for="bg-color">Color</label>
+            <input type="color" id="bg-color" class="input-color" value="#0c1014" />
+          </div>
+        </div>
+
+        <!-- Image: Brand the Harpoon -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-image size="16"></ph-image>
+            Brand the Harpoon
+          </h3>
+          <div class="field-row">
+            <label class="file-label" for="image-upload">
+              <ph-upload-simple size="16"></ph-upload-simple>
+              Choose image (PNG, JPG, SVG)
+            </label>
+            <input type="file" id="image-upload" accept=".png,.jpg,.jpeg,.svg" class="input-file" />
+          </div>
+          <div id="image-controls" hidden>
+            <button id="image-clear" class="btn-ghost" type="button">
+              <ph-x size="14"></ph-x>
+              Remove image
+            </button>
+          </div>
+          <label class="toggle-label">
+            <input type="checkbox" id="hide-bg-dots" checked class="input-checkbox" />
+            <span class="toggle-text">Hide background dots behind logo</span>
+          </label>
+          <div class="slider-row">
+            <label class="slider-label" for="image-size">Image size</label>
+            <input type="range" id="image-size" min="0.1" max="0.5" step="0.01" value="0.4" class="input-range" />
+            <span class="slider-val" id="image-size-val">0.40</span>
+          </div>
+          <div class="slider-row">
+            <label class="slider-label" for="image-margin">Image margin</label>
+            <input type="range" id="image-margin" min="0" max="20" step="1" value="4" class="input-range" />
+            <span class="slider-val" id="image-margin-val">4px</span>
+          </div>
+        </div>
+
+        <!-- QR options -->
+        <div class="rig-group">
+          <h3 class="rig-label">
+            <ph-frame-corners size="16"></ph-frame-corners>
+            Size
+          </h3>
+          <div class="slider-row">
+            <label class="slider-label" for="qr-size">Width / Height</label>
+            <input type="range" id="qr-size" min="100" max="1000" step="10" value="300" class="input-range" />
+            <span class="slider-val" id="qr-size-val">300px</span>
+          </div>
+          <div class="slider-row" style="margin-top: 12px;">
+            <label class="slider-label" for="qr-margin">
+              Open water
+            </label>
+            <input type="range" id="qr-margin" min="0" max="50" step="1" value="10" class="input-range" />
+            <span class="slider-val" id="qr-margin-val">10</span>
+          </div>
+          <div class="field-row" style="margin-top: 12px;">
+            <label class="field-label" id="ec-label" for="error-correction">Hull integrity</label>
+            <select id="error-correction" class="input-select">
+              <option value="L">L — Low (7%)</option>
+              <option value="M" selected>M — Medium (15%)</option>
+              <option value="Q">Q — Quartile (25%)</option>
+              <option value="H">H — High (30%)</option>
+            </select>
+          </div>
+        </div>
+
+      </section>
+    </div>
+
+    <!-- RIGHT COLUMN: preview + export -->
+    <div class="col-preview">
+
+      <section class="panel section-preview">
+        <h2 class="section-title">
+          <ph-eye size="20"></ph-eye>
+          The White Whale
+        </h2>
+        <div id="qr-preview-wrapper">
+          <div id="qr-canvas-container"></div>
+          <div id="qr-empty-state">
+            <ph-anchor size="32"></ph-anchor>
+            <p>"I know not all that may be coming, but be it what it will, I'll go to it laughing."</p>
+            <span class="empty-attr">— Melville</span>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel section-export">
+        <h2 class="section-title">
+          <ph-boat size="20"></ph-boat>
+          Launch
+        </h2>
+        <div class="export-buttons">
+          <button id="download-png" class="btn-export" type="button">
+            <ph-download-simple size="18"></ph-download-simple>
+            Lower the Boats (PNG)
+          </button>
+          <button id="download-svg" class="btn-export" type="button">
+            <ph-download-simple size="18"></ph-download-simple>
+            Lower the Boats (SVG)
+          </button>
+        </div>
+      </section>
+
+    </div>
+  </main>
+
+  <footer class="site-footer">
+    <p>Built from the wreck of the Pequod.</p>
+  </footer>
+
+  <script type="module" src="/src/main.js"></script>
+</body>
+</html>
